@@ -1,203 +1,208 @@
 import Head from 'next/head'
 
-const Home = () => (
-  <div className="container">
-    <Head>
-      <title>Create Next App</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
-
-    <main>
-      <h1 className="title">
-        Welcome to <a href="https://nextjs.org">Next.js!</a>
-      </h1>
-
-      <p className="description">
-        Get started by editing <code>pages/index.js</code>
-      </p>
-
-      <div className="grid">
-        <a href="https://nextjs.org/docs" className="card">
-          <h3>Documentation &rarr;</h3>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a href="https://nextjs.org/learn" className="card">
-          <h3>Learn &rarr;</h3>
-          <p>Learn about Next.js in an interactive course with quizzes!</p>
-        </a>
-
-        <a
-          href="https://github.com/zeit/next.js/tree/master/examples"
-          className="card"
-        >
-          <h3>Examples &rarr;</h3>
-          <p>Discover and deploy boilerplate example Next.js projects.</p>
-        </a>
-
-        <a
-          href="https://zeit.co/new?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          className="card"
-        >
-          <h3>Deploy &rarr;</h3>
-          <p>
-            Instantly deploy your Next.js site to a public URL with ZEIT Now.
-          </p>
-        </a>
+function Home() {
+  const styles = {
+    pageContent: {
+      width: "80%",
+      margin: "0px auto",
+      display: "block",
+      maxWidth: "900px",
+    }
+  }
+  return (
+    <div>
+      <Head>
+        <title>Munch</title>
+      </Head>
+      <div style={styles.backgroundStyle}>
+        <div style={styles.pageContent}>
+          {Navbar()}
+          {DiscoverContent()}
+        </div>
       </div>
-    </main>
-
-    <footer>
-      <a
-        href="https://zeit.co?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Powered by <img src="/zeit.svg" alt="ZEIT Logo" />
-      </a>
-    </footer>
-
-    <style jsx>{`
-      .container {
-        min-height: 100vh;
-        padding: 0 0.5rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      main {
-        padding: 5rem 0;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      footer {
-        width: 100%;
-        height: 100px;
-        border-top: 1px solid #eaeaea;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      footer img {
-        margin-left: 0.5rem;
-      }
-
-      footer a {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-
-      .title a {
-        color: #0070f3;
-        text-decoration: none;
-      }
-
-      .title a:hover,
-      .title a:focus,
-      .title a:active {
-        text-decoration: underline;
-      }
-
-      .title {
-        margin: 0;
-        line-height: 1.15;
-        font-size: 4rem;
-      }
-
-      .title,
-      .description {
-        text-align: center;
-      }
-
-      .description {
-        line-height: 1.5;
-        font-size: 1.5rem;
-      }
-
-      code {
-        background: #fafafa;
-        border-radius: 5px;
-        padding: 0.75rem;
-        font-size: 1.1rem;
-        font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-          DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-      }
-
-      .grid {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-
-        max-width: 800px;
-        margin-top: 3rem;
-      }
-
-      .card {
-        margin: 1rem;
-        flex-basis: 45%;
-        padding: 1.5rem;
-        text-align: left;
-        color: inherit;
-        text-decoration: none;
-        border: 1px solid #eaeaea;
-        border-radius: 10px;
-        transition: color 0.15s ease, border-color 0.15s ease;
-      }
-
-      .card:hover,
-      .card:focus,
-      .card:active {
-        color: #0070f3;
-        border-color: #0070f3;
-      }
-
-      .card h3 {
-        margin: 0 0 1rem 0;
-        font-size: 1.5rem;
-      }
-
-      .card p {
-        margin: 0;
-        font-size: 1.25rem;
-        line-height: 1.5;
-      }
-
-      @media (max-width: 600px) {
-        .grid {
-          width: 100%;
-          flex-direction: column;
+      <style jsx global>{`
+        html,
+        body {
+          padding: 0;
+          margin: 0;
+          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+            Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+          background-color: #F4FAFF
         }
-      }
+        * {
+          box-sizing: border-box;
+        }
     `}</style>
+    </div>
+  )
+}
 
-    <style jsx global>{`
-      html,
-      body {
-        padding: 0;
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-          Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-      }
+function Navbar() {
+  const styles = {
+    wrapperStyle: {
+      width: "100%",
+      height: "100px"
+    },
+    navImg: {
+      width: "80px",
+      paddingTop: "20px"
+    }
+  }
+  return (
+    <div style={styles.wrapperStyle}>
+      <img src="./images/navImg.png" style={styles.navImg} />
+    </div>
+  )
+}
 
-      * {
-        box-sizing: border-box;
-      }
-    `}</style>
-  </div>
-)
+function DiscoverContent() {
+  const titleColor = "#212353";
+  const styles = {
+    title: {
+      color: titleColor,
+      marginBottom: "0px",
+      paddingBottom: "0px",
+      fontSize: "60px"
+    },
+    secondaryTitle: {
+      marginTop: "0px",
+      marginBottom: "0px",
+      color: titleColor,
+      fontWeight: "400",
+      fontSize: "40px"
+    },
+    subtitle: {
+      fontWeight: "500",
+      fontFamily: "Avenir",
+      fontSize: "17px",
+      color: "#767777",
+      marginTop: "15px"
+    }
+  }
+  return (
+    <div>
+      <h1 style={styles.title}>Discover</h1>
+      <h1 style={styles.secondaryTitle}>the perfect place to eat</h1>
+      <h5 style={styles.subtitle}>Find local places to eat & hear genuine stores behind them</h5>
+      {SearchBar()}
+      {BrowseCategories()}
+    </div>
+  )
+}
 
-export default Home
+function SearchBar() {
+  const styles = {
+    formStyle: {
+      width: "100%",
+      display: "flex"
+    },
+    searchStyle: {
+      borderRadius: "40px",
+      border: "1px solid #F0F0F0",
+      width: "100%",
+      marginRight: "10px",
+      height: "40px",
+      outline: "none",
+      paddingLeft: "20px",
+      fontWeight: "500",
+      fontFamily: "Avenir",
+      fontSize: "14px",
+      color: "black",
+    },
+    buttonStyle: {
+      border: "none",
+      backgroundColor: "#9C69E2",
+      color: "white",
+      borderRadius: "40px",
+      width: "200px",
+      fontFamily: "Avenir",
+      fontSize: "14px",
+      outline: "none",
+      cursor: "pointer"
+    }
+  }
+  return (
+    <form style={styles.formStyle}>
+      <input placeholder="search for restaurants, dishes, foods" style={styles.searchStyle} />
+      <button style={styles.buttonStyle}>Search!</button>
+    </form>
+  )
+}
+
+function BrowseCategories() {
+  const categoryTitles = ["Burgers", "Drinks", "Desserts", "Pizza", "Chinese"]
+  let categoryObjects = [];
+  categoryTitles.forEach(function (title) {
+    categoryObjects.push(Category({ title }));
+  })
+
+  const styles = {
+    containerStyle: {
+      marginTop: "50px"
+    },
+    categoriesWrapper: {
+      width: "100%",
+      maxWidth: "700px",
+      display: "flex",
+      flexWrap: "wrap",
+      justifyContent: "space-between",
+      alignItems: "stretch"
+    },
+    subtitle: {
+      fontWeight: "500",
+      fontFamily: "Avenir",
+      fontSize: "18px",
+      color: "#767777",
+      marginBottom: "20px"
+    }
+  }
+
+  return (
+    <div style={styles.containerStyle}>
+      <h5 style={styles.subtitle}>Or browse what's trending in your city</h5>
+      <div style={styles.categoriesWrapper}>
+        {categoryObjects}
+        {Category({ title: "More" })}
+      </div>
+    </div>
+  )
+}
+
+function Category(props) {
+  const size = "80px";
+  const styles = {
+    tile: {
+      minWidth: size,
+      minHeight: size,
+      maxWidth: size,
+      maxHeight: size,
+      backgroundColor: "white",
+      marginRight: "20px",
+      marginBottom: "20px",
+      borderRadius: "10px",
+      boxShadow: "0px 4px 5px rgba(75, 93, 104, 0.25)",
+      cursor: "pointer"
+    },
+    icon: {
+      margin: "0px auto",
+      display: "block",
+      height: "40px",
+      paddingTop: "10px"
+    },
+    title: {
+      textAlign: "center",
+      fontFamily: "Avenir",
+      fontWeight: "600",
+      color: "black",
+      marginTop: "7px"
+    }
+  }
+  return (
+    <div style={styles.tile}>
+      <img src={"./images/" + props.title.toLowerCase() + ".png"} style={styles.icon} />
+      <p style={styles.title}>{props.title}</p>
+    </div>
+  )
+}
+
+export default Home;
