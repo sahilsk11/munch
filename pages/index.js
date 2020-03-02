@@ -6,7 +6,7 @@ function Home() {
       width: "80%",
       margin: "0px auto",
       display: "block",
-      maxWidth: "900px",
+      maxWidth: "1000px",
     }
   }
   return (
@@ -58,6 +58,24 @@ function Navbar() {
 function DiscoverContent() {
   const titleColor = "#212353";
   const styles = {
+    containerWrapper: {
+      marginTop: "60px",
+      display: "flex"
+    },
+    textWrapper: {
+      width: "60%",
+      //border: "1px solid green"
+    },
+    imgWrapper: {
+      width: "40%",
+      //border: "1px solid red"
+    },
+    landingImg: {
+      width: "100%",
+      margin: "0px auto",
+      display: "block",
+      marginTop: "30px"
+    },
     title: {
       color: titleColor,
       marginBottom: "0px",
@@ -81,16 +99,23 @@ function DiscoverContent() {
   }
   return (
     <div>
-      <h1 style={styles.title}>Discover</h1>
-      <h1 style={styles.secondaryTitle}>the perfect place to eat</h1>
-      <h5 style={styles.subtitle}>Find local places to eat & hear genuine stores behind them</h5>
-      {SearchBar()}
+      <div style={styles.containerWrapper}>
+        <div style={styles.textWrapper}>
+          <h1 style={styles.title}>Discover</h1>
+          <h1 style={styles.secondaryTitle}>the perfect place to eat</h1>
+          <h5 style={styles.subtitle}>Curated restaurant picks personalized for you.</h5>
+          {ButtonBar()}
+        </div>
+        <div style={styles.imgWrapper}>
+          <img src="./images/landing-img.svg" style={styles.landingImg} />
+        </div>
+      </div>
       {BrowseCategories()}
     </div>
   )
 }
 
-function SearchBar() {
+function ButtonBar() {
   const styles = {
     formStyle: {
       width: "100%",
@@ -109,23 +134,39 @@ function SearchBar() {
       fontSize: "14px",
       color: "black",
     },
-    buttonStyle: {
+    munchButtonStyle: {
       border: "none",
       backgroundColor: "#9C69E2",
       color: "white",
       borderRadius: "40px",
-      width: "200px",
+      width: "150px",
+      height: "40px",
       fontFamily: "Avenir",
       fontSize: "14px",
       outline: "none",
-      cursor: "pointer"
-    }
+      cursor: "pointer",
+      boxShadow: "0px 4px 5px rgba(0, 0, 0, 0.2)"
+    },
+    infoButtonStyle: {
+      border: "none",
+      backgroundColor: "white",
+      color: "black",
+      borderRadius: "40px",
+      width: "150px",
+      height: "40px",
+      fontFamily: "Avenir",
+      fontSize: "14px",
+      outline: "none",
+      cursor: "pointer",
+      marginLeft: "20px",
+      boxShadow: "0px 4px 5px rgba(0, 0, 0, 0.2)"
+    },
   }
   return (
-    <form style={styles.formStyle}>
-      <input placeholder="search for restaurants, dishes, foods" style={styles.searchStyle} />
-      <button style={styles.buttonStyle}>Search!</button>
-    </form>
+    <div>
+      <button style={styles.munchButtonStyle}>Search!</button>
+      <button style={styles.infoButtonStyle}>What's Munch?</button>
+    </div>
   )
 }
 
@@ -141,8 +182,8 @@ function BrowseCategories() {
       marginTop: "50px"
     },
     categoriesWrapper: {
-      width: "100%",
       maxWidth: "700px",
+      width: "100%",
       display: "flex",
       flexWrap: "wrap",
       justifyContent: "space-between",
