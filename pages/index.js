@@ -1,6 +1,10 @@
 import Head from 'next/head'
+import React, { useState, useEffect } from 'react';
+
 
 function Home() {
+  const [displaySurvey, updateSurvey] = useState(false);
+
   const styles = {
     pageContent: {
       width: "80%",
@@ -17,9 +21,10 @@ function Home() {
       <div style={styles.backgroundStyle}>
         <div style={styles.pageContent}>
           {Navbar()}
-          {DiscoverContent()}
+          {DiscoverContent({ updateSurvey })}
         </div>
       </div>
+      {SurveyScreen({ display: displaySurvey, updateSurvey: updateSurvey })}
       <style jsx global>{`
         html,
         body {
@@ -55,7 +60,7 @@ function Navbar() {
   )
 }
 
-function DiscoverContent() {
+function DiscoverContent(props) {
   const titleColor = "#212353";
   const styles = {
     containerWrapper: {
@@ -97,6 +102,9 @@ function DiscoverContent() {
       marginTop: "15px"
     }
   }
+
+
+
   return (
     <div>
       <div style={styles.containerWrapper}>
@@ -104,7 +112,7 @@ function DiscoverContent() {
           <h1 style={styles.title}>Discover</h1>
           <h1 style={styles.secondaryTitle}>the perfect place to eat</h1>
           <h5 style={styles.subtitle}>Curated restaurant picks personalized for you.</h5>
-          {ButtonBar()}
+          {ButtonBar({ updateSurvey: props.updateSurvey })}
         </div>
         <div style={styles.imgWrapper}>
           <img src="./images/landing-img.svg" style={styles.landingImg} />
@@ -115,10 +123,10 @@ function DiscoverContent() {
   )
 }
 
-function ButtonBar() {
+function ButtonBar(props) {
   const styles = {
     formStyle: {
-      width: "100%",
+      width: "355px",
       display: "flex"
     },
     searchStyle: {
@@ -163,8 +171,8 @@ function ButtonBar() {
     },
   }
   return (
-    <div>
-      <button style={styles.munchButtonStyle}>Search!</button>
+    <div style={styles.formStyle}>
+      <button onClick={() => props.updateSurvey(true)} style={styles.munchButtonStyle}>Search!</button>
       <button style={styles.infoButtonStyle}>What's Munch?</button>
     </div>
   )
@@ -242,6 +250,106 @@ function Category(props) {
     <div style={styles.tile}>
       <img src={"./images/" + props.title.toLowerCase() + ".png"} style={styles.icon} />
       <p style={styles.title}>{props.title}</p>
+    </div>
+  )
+}
+
+function SurveyScreen(props) {
+  const styles = {
+    container: {
+      position: "fixed",
+      zIndex: "1",
+      paddingTop: "100px",
+      left: "0",
+      top: "0",
+      width: "100%",
+      height: "100%",
+      overflow: "auto",
+      backgroundColor: "rgba(229, 229, 229, 0.4)",
+    },
+    modalContent: {
+      backgroundColor: "#fefefe",
+      margin: "auto",
+      border: "1px solid white",
+      width: "80%",
+      maxWidth: "500px",
+      position: "relative",
+      paddingBottom: "40px",
+      paddingTop: "3%",
+      borderRadius: "17px",
+      boxShadow: "0px 4px 20px rgba(75, 93, 104, 0.25)",
+    },
+    infoButton: {
+
+    },
+    closeButton: {
+      cursor: "pointer"
+    },
+    screenContent: {
+
+    },
+    surveyNumber: {
+
+    },
+    surveyQuestion: {
+
+    },
+    surveyOptions: {
+      margin: "0px auto",
+      display: "flex",
+      justifyContent: "center",
+      width: "80%",
+    }
+  }
+
+  if (props.display) {
+    return (
+      <div style={styles.container}>
+        <div style={styles.modalContent}>
+          <div style={styles.infoButton}>
+            i
+          </div>
+          <div style={styles.closeButton} onClick={() => props.updateSurvey(false)}>
+            x
+          </div>
+          <div style={styles.screenContent}>
+            <h3 style={styles.surveyNumber}>{props.number}</h3>
+            <h3 style={styles.surveyQuestion}>{props.question}</h3>
+            <div style={styles.surveyOptions}>
+              {SurveyOption({ title: "Quick/on-the-go" })}
+              {SurveyOption({ title: "Casual" })}
+              {SurveyOption({ title: "Fine Dining" })}
+            </div>
+          </div>
+          <div>
+            <button>Next Question</button>
+            <div>
+              .....
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  } else {
+    return null;
+  }
+}
+
+function SurveyOption(props) {
+  let size = "100px"
+  const styles = {
+    container: {
+      boxShadow: "0px 4px 20px rgba(75, 93, 104, 0.25)",
+      width: size,
+      height: size,
+      cursor: "pointer",
+      margin: "15px"
+    }
+  }
+  return (
+    <div style={styles.container}>
+      <img src={props.img} style={styles.img} />
+      <h5>{props.title}</h5>
     </div>
   )
 }
