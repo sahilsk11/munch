@@ -1,13 +1,71 @@
 import Head from 'next/head'
+import { usePosition } from 'use-position';
+import GoogleMapReact from 'google-map-react';
+import React, { useState, useEffect } from 'react';
+import fetch from 'isomorphic-unfetch'
+
+
+function queryYelpData(lat, lon, callback) {
+  let corsUrl = "https://cors-anywhere.herokuapp.com/";
+  fetch(
+    "http://localhost:8080/https://api.yelp.com/v3/businesses/search?latitude=" + lat +
+    "&longitude=" + lon + "&term=food&sort_by=distance", {
+    method: 'GET',
+    headers: {
+      'Authorization': "Bearer zeOQeQVQL7pKKE5IRpws3wf5_NizQ1gErWsXqyhREu13H5hovg_VKI7R1d559FbneJNHjMkbgtWTnRltEbPVbztgIAJv92yuODe_B1iB5K2USE9at7UOU22JVxlkXnYx"
+    }
+  }
+  ).then((response) => {
+    return response.json();
+  }).then((data) => {
+    let parsedData = data.businesses.slice(0, 5)
+    callback(parsedData);
+  }).catch(() => {
+    callback("error");
+  })
+}
 
 function Home() {
+
+  //component styles
   const styles = {
     pageContent: {
-      width: "80%",
+      width: "90%",
       margin: "0px auto",
       display: "block",
       maxWidth: "1000px",
+      marginBottom: "100px"
     }
+  }
+
+  //component states
+  const [lat, setLat] = useState(null);
+  const [lng, setLon] = useState(null);
+  const [yelpData, updateYelpData] = useState(null);
+  const [pageLoaded, updateLoaded] = useState(false);
+  const coords = usePosition();
+
+  //component logic
+  useEffect(() => {
+    if (lat == null || lng == null) {
+      if (lat == null && coords.latitude != undefined)
+        setLat(coords.latitude);
+      if (lng == null && coords.longitude != undefined)
+        setLon(coords.longitude);
+    }
+  }, [coords]);
+
+  useEffect(() => {
+    if (lat != null) {
+      queryYelpData(lat, lng, updateYelpData);
+      updateLoaded(true)
+    }
+  }, [lat]);
+  console.log(yelpData);
+
+  //component render
+  if (yelpData == null) {
+    return <div></div>;
   }
   return (
     <div>
@@ -17,7 +75,7 @@ function Home() {
       <div style={styles.backgroundStyle}>
         <div style={styles.pageContent}>
           {Navbar()}
-          {ResultsContent()}
+          {ResultsContent({ data: yelpData, lat, lng })}
         </div>
       </div>
       <style jsx global>{`
@@ -55,7 +113,7 @@ function Navbar() {
   )
 }
 
-function ResultsContent() {
+function ResultsContent(props) {
   const styles = {
     container: {
       borderRadius: "20px",
@@ -73,8 +131,8 @@ function ResultsContent() {
     <div style={styles.container}>
       {TileTitle()}
       <div style={styles.contentWrapper}>
-        {ResultsList()}
-        {LeftColumn()}
+        {ResultsList({ data: props.data })}
+        {RightColumn({ lat: props.lat, lng: props.lng })}
       </div>
     </div>
   )
@@ -105,7 +163,7 @@ function TileTitle() {
   )
 }
 
-function ResultsList() {
+function ResultsList(props) {
   const styles = {
     container: {
       width: "50%",
@@ -113,16 +171,20 @@ function ResultsList() {
       overflow: "scroll"
     }
   }
+  let entries = []
+  console.log(props.data)
+  props.data.forEach(function(restaurant) {
+    entries.push(RestaurantEntry(restaurant));
+  })
   return (
     <div style={styles.container}>
-      {RestaurantEntry()}
-      {RestaurantEntry()}
-      {RestaurantEntry()}
+      {entries}
     </div>
   )
 }
 
 function RestaurantEntry(props) {
+  console.log(props)
   const styles = {
     container: {
       display: "flex",
@@ -161,10 +223,10 @@ function RestaurantEntry(props) {
           <p style={styles.resultNum}>1</p>
         </div>
         <div style={styles.col2}>
-          <img src="./images/sweet-matcha-cafe.png" style={styles.img} />
+          <img src={props.image_url} style={styles.img} />
         </div>
         <div style={styles.col3}>
-          <h3>Sweet Matcha Cafe</h3>
+          <h3>{props.name}</h3>
           <p>dessert • new • ice cream</p>
           <div></div>
           <p>“An earthy cafe with yummy desserts. All ice creams are made in-house with the owner, Danni Burgess, family recipe...”</p>
@@ -176,17 +238,33 @@ function RestaurantEntry(props) {
   )
 }
 
-function LeftColumn() {
+function RightColumn(props) {
+
   const styles = {
     container: {
       width: "50%",
-      backgroundImage: "url('./images/map.png')",
+      //backgroundImage: "url('./images/map.png')",
       height: "calc(80vh - 90px)"
     }
   }
-  return (
-    <div style={styles.container}></div>
-  )
+  if (props.lat == null || props.lng == null) {
+    return (
+      <div style={styles.container}>
+        loading
+      </div>
+    )
+  }
+  else {
+    return (
+      <div style={styles.container}>
+        <GoogleMapReact
+          bootstrapURLKeys={{ key: "AIzaSyC3Ai5zga37jqsXgj0uXvoJ0p1vXVwHSXU" }}
+          defaultCenter={{ lat: props.lat, lng: props.lng }}
+          defaultZoom={11}
+        />
+      </div>
+    )
+  }
 }
 
 export default Home;
