@@ -8,8 +8,9 @@ import StarRatings from 'react-star-ratings';
 
 function queryYelpData(lat, lon, callback) {
   let corsUrl = "https://cors-anywhere.herokuapp.com/";
+  let localUrl = "http://localhost:8080/";
   fetch(
-    "http://localhost:8080/https://api.yelp.com/v3/businesses/search?latitude=" + lat +
+    corsUrl + "https://api.yelp.com/v3/businesses/search?latitude=" + lat +
     "&longitude=" + lon + "&term=food&sort_by=distance", {
     method: 'GET',
     headers: {
