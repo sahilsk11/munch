@@ -247,7 +247,7 @@ function Category(props) {
     }
   }
   return (
-    <div style={styles.tile}>
+    <div style={styles.tile} onClick={() => {window.location="search?discover=" + props.title.toLowerCase()}}>
       <img src={"./images/" + props.title.toLowerCase() + ".png"} style={styles.icon} />
       <p style={styles.title}>{props.title}</p>
     </div>

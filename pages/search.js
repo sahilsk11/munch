@@ -10,8 +10,8 @@ function queryYelpData(lat, lon, callback) {
   let corsUrl = "https://cors-anywhere.herokuapp.com/";
   let localUrl = "http://localhost:8080/";
   fetch(
-    corsUrl + "https://api.yelp.com/v3/businesses/search?latitude=" + lat +
-    "&longitude=" + lon + "&term=food&sort_by=distance", {
+    localUrl + "https://api.yelp.com/v3/businesses/search?latitude=" + lat +
+    "&longitude=" + lon + "&term=restaurant&sort_by=distance", {
     method: 'GET',
     headers: {
       'Authorization': "Bearer zeOQeQVQL7pKKE5IRpws3wf5_NizQ1gErWsXqyhREu13H5hovg_VKI7R1d559FbneJNHjMkbgtWTnRltEbPVbztgIAJv92yuODe_B1iB5K2USE9at7UOU22JVxlkXnYx"
@@ -28,6 +28,9 @@ function queryYelpData(lat, lon, callback) {
 }
 
 function Home() {
+  //var search = document.url.substring(document.url.indexOf("?") + 1)
+  //params = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}')
+  //console.log(name);
 
   //component styles
   const styles = {
@@ -41,11 +44,14 @@ function Home() {
   }
 
   //component states
-  const [lat, setLat] = useState(null);
-  const [lng, setLon] = useState(null);
-  const [yelpData, updateYelpData] = useState(null);
+  const [lat, setLat] = useState(37.314807);
+  const [lng, setLon] = useState(-121.914609);
+  const [yelpData, updateYelpData] = useState(null)
   const coords = usePosition();
-  
+  const [columnState, updateColumn] = useState(0);
+
+  const dev = true;
+
   //component logic
   useEffect(() => {
     if (lat == null || lng == null) {
@@ -61,7 +67,6 @@ function Home() {
       queryYelpData(lat, lng, updateYelpData);
     }
   }, [lat]);
-  console.log(yelpData);
 
   //component render
   let page;
@@ -88,7 +93,7 @@ function Home() {
       </div>
     );
   } else {
-    page = ResultsContent({ data: yelpData, lat, lng });
+    page = ResultsContent({ data: yelpData, lat, lng, columnState, updateColumn });
   }
   return (
     <div>
@@ -122,7 +127,8 @@ function Navbar() {
   const styles = {
     wrapperStyle: {
       width: "100%",
-      height: "80px"
+      height: "80px",
+      cursor: "pointer"
     },
     navImg: {
       width: "80px",
@@ -130,7 +136,7 @@ function Navbar() {
     }
   }
   return (
-    <div style={styles.wrapperStyle}>
+    <div style={styles.wrapperStyle} onClick={() => { window.location.href = "/" }}>
       <img src="./images/navImg.png" style={styles.navImg} />
     </div>
   )
@@ -154,8 +160,8 @@ function ResultsContent(props) {
     <div style={styles.container}>
       {TileTitle()}
       <div style={styles.contentWrapper}>
-        {ResultsList({ data: props.data })}
-        {RightColumn({ data: props.data, lat: props.lat, lng: props.lng })}
+        {ResultsList({ data: props.data, updateColumn: props.updateColumn })}
+        {RightColumn({ data: props.data, lat: props.lat, lng: props.lng, columnState: props.columnState, updateColumn: props.updateColumn })}
       </div>
     </div>
   )
@@ -195,10 +201,9 @@ function ResultsList(props) {
     }
   }
   let entries = []
-  console.log(props.data)
   let key = 0;
   props.data.forEach(function (restaurant) {
-    entries.push(RestaurantEntry({ ...restaurant, key }));
+    entries.push(RestaurantEntry({ ...restaurant, key, updateColumn: props.updateColumn }));
     key++;
   });
   return (
@@ -213,7 +218,6 @@ function RestaurantEntry(props) {
   if (imgSrc == "") {
     imgSrc = "./images/landing-img.png"
   }
-  console.log(props)
   const styles = {
     container: {
       display: "flex",
@@ -275,7 +279,7 @@ function RestaurantEntry(props) {
     }
   }
   let categoriesStr = "";
-  props.categories.forEach(function(categories) {
+  props.categories.forEach(function (categories) {
     let category = categories.alias;
     if (categoriesStr.length == 0) {
       categoriesStr += category;
@@ -285,7 +289,7 @@ function RestaurantEntry(props) {
   })
   return (
     <div>
-      <div style={styles.container}>
+      <div style={styles.container} onClick={() => { props.updateColumn(props.key) }}>
         <div style={styles.col1}>
           <p style={styles.resultNum}><strong>{props.key + 1}</strong></p>
         </div>
@@ -297,7 +301,7 @@ function RestaurantEntry(props) {
         <div style={styles.col3}>
           <h3 style={styles.title}>{props.name}</h3>
           <p style={styles.categoriesLabel}>{categoriesStr}</p>
-          <div style={{paddingTop: "10px"}}>
+          <div style={{ paddingTop: "10px" }}>
             <StarRatings
               rating={props.rating}
               starRatedColor="#DFC71E"
@@ -320,7 +324,8 @@ function RightColumn(props) {
     container: {
       width: "50%",
       //backgroundImage: "url('./images/map.png')",
-      height: "calc(85vh - 90px)"
+      height: "calc(85vh - 90px)",
+      position: "relative"
     }
   }
   if (props.lat == null || props.lng == null) {
@@ -330,10 +335,15 @@ function RightColumn(props) {
       </div>
     )
   }
-  else {
+  else if (props.columnState == "map") {
     let markers = [];
-    props.data.forEach(function(restaurant) {
-      markers.push(<Marker title={restaurant.name} lat={restaurant.coordinates.latitude} lng={restaurant.coordinates.longitude} />)
+    var index = 0;
+    props.data.forEach(function (restaurant) {
+      markers.push(
+        <Marker title={restaurant.name} lat={restaurant.coordinates.latitude} index={index} test={"hi"} updateColumn={props.updateColumn} lng={restaurant.coordinates.longitude} />
+      );
+      console.log(index)
+      index++;
     });
     return (
       <div style={styles.container}>
@@ -346,10 +356,179 @@ function RightColumn(props) {
         </GoogleMapReact>
       </div>
     )
+  } else {
+    console.log(props.columnState)
+    const styles1 = {
+      container: {
+        borderLeft: "1px solid grey",
+        position: "relative",
+        height: "100%",
+        overflow: "scroll"
+      },
+      close: {
+        marginTop: "0px",
+        fontSize: "14px",
+        fontFamily: "Avenir",
+        fontWeight: "400",
+        position: "absolute",
+        right: "10px",
+        top: "5px",
+        cursor: "pointer"
+      },
+      img: {
+        width: "80%",
+        maxWidth: "300px",
+        display: "block",
+        margin: "0px auto",
+        paddingTop: "30px",
+      },
+      title: {
+        fontFamily: "Avenir",
+        textAlign: "center",
+        marginBottom: "0px"
+      },
+      categoriesLabel: {
+        margin: "0px",
+        fontSize: "13px",
+        color: "#767677",
+        fontFamily: "Avenir",
+        textAlign: "center"
+      },
+      subtitle: {
+        fontFamily: "Avenir",
+        textAlign: "center",
+        marginBottom: "10px",
+        marginTop: "30px"
+      },
+      reviews: {
+        display: "block",
+        margin: "0px auto",
+        width: "135px"
+      },
+      address1: {
+        fontFamily: "Avenir",
+        fontSize: "14px",
+        color: "#767677",
+        textAlign: "center",
+        marginBottom: "0px"
+      },
+      address2: {
+        fontFamily: "Avenir",
+        fontSize: "10px",
+        color: "#767677",
+        textAlign: "center",
+        marginTop: "0px"
+      },
+      storiesContainer: {
+        display: "flex",
+        justifyContent: "center",
+        width: "50%",
+        margin: "0px auto"
+      },
+      story: {
+        borderRadius: "100%",
+        width: "50px",
+        height: "50px",
+        border: "2px dashed grey",
+        cursor: "pointer",
+        display: "block",
+        margin: "0px auto",
+        overflow: "hidden"
+      },
+      paragraph: {
+        color: "#767677",
+        fontSize: "13px",
+        width: "80%",
+        maxWidth: "400px",
+        textAlign: "center",
+        margin: "0px auto",
+        display: "block",
+        fontFamily: "Avenir"
+      },
+      contact: {
+        textAlign: "center",
+        width: "70%",
+        fontFamily: "Avenir",
+        display: "block",
+        margin: "0px auto",
+        marginTop: "30px",
+        marginBottom: "30px",
+
+      },
+      phone: {
+        color: "#9C69E2",
+        cursor: "pointer"
+      },
+      closeButton: {
+        backgroundColor: "#9C69E2",
+        color: "white",
+        fontFamily: "Avenir",
+        textAlign: "center",
+        border: 'none',
+        display: "block",
+        margin: "0px auto",
+        marginBottom: "50px",
+        width: "80px",
+        height: "30px",
+        fontSize: "13px",
+        cursor: "pointer",
+        borderRadius: "15px"
+      }
+    }
+    const restaurant = props.data[props.columnState];
+
+    let categoriesStr = "";
+    restaurant.categories.forEach(function (categories) {
+      let category = categories.alias;
+      if (categoriesStr.length == 0) {
+        categoriesStr += category;
+      } else {
+        categoriesStr += " • " + category;
+      }
+    })
+    return (
+      <div style={styles.container}>
+        <div style={styles1.container}>
+          <p style={styles1.close} onClick={() => { props.updateColumn("map") }}>close X</p>
+          <img src={restaurant.image_url} style={styles1.img} />
+          <h1 style={styles1.title}>{restaurant.name}</h1>
+          <p style={styles1.categoriesLabel}>{categoriesStr}</p>
+          <div style={styles1.reviews}>
+            <StarRatings
+              rating={restaurant.rating}
+              starRatedColor="#DFC71E"
+              starDimension="23px"
+              starSpacing="2px"
+            />
+          </div>
+          <p style={styles1.address1}>{restaurant.location.display_address[0]}</p>
+          <p style={styles1.address2}>{restaurant.location.display_address[1]}</p>
+
+          <h3 style={styles1.subtitle}>Curated Stories from the Owner</h3>
+          <div style={styles1.storiesContainer}>
+            <img src={restaurant.image_url} style={styles1.story}/>
+            <img src={restaurant.image_url} style={styles1.story} />
+            <img src={restaurant.image_url} style={styles1.story} />
+          </div>
+
+          <h3 style={styles1.subtitle}>History, Culture, and Scene</h3>
+          <p style={styles1.paragraph}>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+          </p>
+
+          <h5 style={styles1.contact}>Interested in more? Hit up the owner at:<br></br> <span style={styles1.phone}>{restaurant.display_phone}</span></h5>
+
+          <button onClick={() => {props.updateColumn("map")}} style={styles1.closeButton}>close</button>
+        </div>
+      </div >
+    )
   }
 }
 
 class Marker extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     const styleRound = {
       position: "absolute",
@@ -376,8 +555,9 @@ class Marker extends React.Component {
       margin: "-20px 0 0 -20px",
     }
     let content = this.props.$hover ? this.props.title : "";
+    console.log(this.props)
     return (
-      <div style={styleRound}>
+      <div style={styleRound} onClick={() => { console.log(this.props.key); this.props.updateColumn(this.props.index) }}>
         {content}
       </div>
     )
