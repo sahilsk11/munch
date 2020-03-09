@@ -38,8 +38,8 @@ function Home() {
       width: "90%",
       margin: "0px auto",
       display: "block",
-      maxWidth: "1000px",
-      marginBottom: "10px"
+      maxWidth: "1200px",
+      marginBottom: "30px"
     }
   }
 
@@ -48,7 +48,7 @@ function Home() {
   const [lng, setLon] = useState(null);
   const [yelpData, updateYelpData] = useState(null)
   const coords = usePosition();
-  const [columnState, updateColumn] = useState(0);
+  const [columnState, updateColumn] = useState("map");
 
   const dev = true;
 
@@ -84,12 +84,24 @@ function Home() {
     }
     const title = {
       marginTop: "0px",
-      textAlign: "center"
+      textAlign: "center",
+      marginBottom: "0px"
+    }
+    const subtitle = {
+      color: "grey",
+      fontSize: "14px",
+      textAlign: "center",
+      fontFamily: "Avenir",
+      marginTop: "7px"
+    }
+    const heart = {
+
     }
     page = (
       <div style={loadingContainer}>
         <img style={loadingStyle} src="./images/loading.gif" />
         <h5 style={title}>Crunching your Munch...</h5>
+        <p style={subtitle}>Please enable location services!</p>
       </div>
     );
   } else {
@@ -138,6 +150,7 @@ function Navbar() {
   return (
     <div style={styles.wrapperStyle} onClick={() => { window.location.href = "/" }}>
       <img src="./images/navImg.png" style={styles.navImg} />
+      <div></div>
     </div>
   )
 }
@@ -154,8 +167,14 @@ function ResultsContent(props) {
     contentWrapper: {
       display: "flex",
       position: "relative"
+    },
+    heart: {
+      marginTop: "100px",
+      marginBottom: "30px",
+      textAlign: "center"
     }
   }
+
   return (
     <div style={styles.container}>
       {TileTitle()}
@@ -163,6 +182,7 @@ function ResultsContent(props) {
         {ResultsList({ data: props.data, updateColumn: props.updateColumn })}
         {RightColumn({ data: props.data, lat: props.lat, lng: props.lng, columnState: props.columnState, updateColumn: props.updateColumn })}
       </div>
+      <p style={styles.heart}>Made with ❤️ by the Kapurs</p>
     </div>
   )
 }
@@ -179,7 +199,11 @@ function TileTitle() {
       fontSize: "23px"
     },
     ruleStyle: {
-      marginBottom: "-1px"
+      marginBottom: "-1px",
+      height: "1px",
+      color: "#D0D1DC",
+      backgroundColor: "#D0D1DC",
+      border: "none"
     }
   }
   return (
@@ -287,6 +311,12 @@ function RestaurantEntry(props) {
       categoriesStr += " • " + category;
     }
   })
+  const hrStyle = {
+    height: "1px",
+    color: "#D0D1DC",
+    backgroundColor: "#D0D1DC",
+    border: "none"
+  }
   return (
     <div>
       <div style={styles.container} onClick={() => { props.updateColumn(props.key) }}>
@@ -312,7 +342,7 @@ function RestaurantEntry(props) {
           <p style={styles.subtext}>"A great place to eat for all ages!"</p>
         </div>
       </div>
-      <hr></hr>
+      <hr style={hrStyle} />
 
     </div>
   )
@@ -473,6 +503,14 @@ function RightColumn(props) {
         fontSize: "13px",
         cursor: "pointer",
         borderRadius: "15px"
+      },
+      feedback: {
+        display: "block",
+        margin: "0px auto",
+        width: "50px",
+        cursor: "pointer",
+        marginTop: "10px",
+        marginBottom: "10px"
       }
     }
     const restaurant = props.data[props.columnState];
@@ -494,6 +532,7 @@ function RightColumn(props) {
           <img src={img} style={styles1.img} />
           <h1 style={styles1.title}>{restaurant.name}</h1>
           <p style={styles1.categoriesLabel}>{categoriesStr}</p>
+          <br />
           <div style={styles1.reviews}>
             <StarRatings
               rating={restaurant.rating}
@@ -502,6 +541,7 @@ function RightColumn(props) {
               starSpacing="2px"
             />
           </div>
+          <img src="./images/feedback.svg" style={styles1.feedback} />
           <p style={styles1.address1}>{restaurant.location.display_address[0]}</p>
           <p style={styles1.address2}>{restaurant.location.display_address[1]}</p>
 
@@ -514,7 +554,7 @@ function RightColumn(props) {
 
           <h3 style={styles1.subtitle}>History, Culture, and Scene</h3>
           <p style={styles1.paragraph}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            It’s that last bite you fight over, that side you share while you tell a story, the drinks you’ll make a toast to. And that’s what we’re about. Because at our restaurant, we believe in firsts, and seconds, and thirds. We believe in “more veggies, please!” It’s that last bite you fight over, that side you share while you tell a story, the drinks you’ll make a toast to. And that’s what we’re about. Because at our restaurant, we believe in firsts, and seconds, and thirds. We believe in “more veggies, please!”
           </p>
 
           <h5 style={styles1.contact}>Interested in more? Hit up the owner at:<br></br> <span style={styles1.phone}>{restaurant.display_phone}</span></h5>

@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link'
 
 
 function Home() {
@@ -11,6 +12,73 @@ function Home() {
       margin: "0px auto",
       display: "block",
       maxWidth: "1000px",
+    },
+    banner: {
+      marginTop: "100px",
+      width: "100%",
+      backgroundColor: "rgba(156, 105, 226, 0.15)",
+      minHeight: "300px",
+      display: "flex",
+      marginBottom: "100px"
+    },
+    bannerChildren: {
+      width: "80%",
+      maxWidth: "1000px",
+      display: "flex",
+      margin: "0px auto"
+    },
+    emojiWrapper: {
+      width: "50%",
+      position: "relative"
+    },
+    textWrapper: {
+      width: "50%",
+    },
+    img: {
+      position: "absolute",
+      width: "70%",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%,-50%)"
+    },
+    title: {
+      fontFamily: "Avenir",
+      color: "#212353",
+      fontSize: "30px",
+    },
+    paragraph: {
+      fontFamily: "Avenir",
+      color: "rgba(75, 93, 104, 0.5)",
+      fontSize: "15px",
+      paddingBottom: "20px"
+    },
+    influencers: {
+      display: "block",
+      margin: "0px auto",
+      width: "80%",
+      maxWidth: "1000px"
+    },
+    centerTitle: {
+      fontFamily: "Avenir",
+      color: "#212353",
+      fontSize: "30px",
+      textAlign: "center",
+      marginBottom: "0px"
+    },
+    subtitle: {
+      marginTop: "0px",
+      fontFamily: "Avenir",
+      color: "rgba(75, 93, 104, 0.5)",
+      fontSize: "15px",
+      paddingBottom: "20px",
+      textAlign: "center"
+    },
+    footer: {
+      marginTop: "80px"
+    },
+    heart: {
+      fontFamily: "Avenir",
+      textAlign: "center"
     }
   }
   return (
@@ -22,6 +90,24 @@ function Home() {
         <div style={styles.pageContent}>
           {Navbar()}
           {DiscoverContent({ updateSurvey })}
+          
+        </div>
+        <div style={styles.banner}>
+          <div style={styles.bannerChildren}>
+            <div style={styles.emojiWrapper}>
+              <img style={styles.img} src="./images/emojis.png" />
+            </div>
+            <div style={styles.textWrapper}>
+              <h3 style={styles.title}>munch helps you find the right place to eat, everyday.</h3>
+              <p style={styles.paragraph}>Using just your responses from five questions, munch curates the top five recomended restaurants for you. Munch gets smarted everytime you use it based on what restaurants you like and dislike. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+            </div>
+          </div>
+        </div>
+        <h3 style={styles.centerTitle}>What's Trending?</h3>
+        <p style={styles.subtitle}>from influencers across the web</p>
+        <img src="./images/people.svg" style={styles.influencers} />
+        <div style={styles.footer}>
+          <p style={styles.heart}>Made with ❤️ by the Kapurs</p>
         </div>
       </div>
       {SurveyScreen({ display: displaySurvey, updateSurvey: updateSurvey })}
@@ -158,7 +244,7 @@ function ButtonBar(props) {
     infoButtonStyle: {
       border: "none",
       backgroundColor: "white",
-      color: "black",
+      color: "#212353",
       borderRadius: "40px",
       width: "150px",
       height: "40px",
@@ -284,13 +370,14 @@ function SurveyScreen(props) {
     },
     closeButton: {
       marginTop: "20px",
-      fontSize: "14px",
+      fontSize: "15px",
       fontFamily: "Avenir",
       fontWeight: "400",
       position: "absolute",
-      right: "10px",
+      right: "28px",
       top: "5px",
-      cursor: "pointer"
+      cursor: "pointer",
+      color: "#9C69E2"
     },
     screenContent: {
 
@@ -302,7 +389,7 @@ function SurveyScreen(props) {
       fontFamily: "Avenir",
       textAlign: "center",
       fontSize: "20px",
-      marginBottom: "0px"
+      marginBottom: "9px",
     },
     surveyOptions: {
       margin: "0px auto",
@@ -326,6 +413,10 @@ function SurveyScreen(props) {
       cursor: "pointer",
       outline: "none",
       boxShadow: "0px 4px 20px rgba(75, 93, 104, 0.25)",
+    },
+    number: {
+      textAlign: "center",
+      color: "#9C69E2"
     }
   }
   const [selectedIndex, updateSelected] = useState(null);
@@ -345,7 +436,7 @@ function SurveyScreen(props) {
       updateSurveyState(2);
       updateSelected(null);
     } else if (surveyState == 2 && categoryC != null) {
-      window.location.href="search";
+      window.location.href = "search";
     }
   }
 
@@ -372,7 +463,7 @@ function SurveyScreen(props) {
             <h3 style={styles.title}>What sounds good?</h3>
             <div style={styles.screenContent}>
               <div style={styles.surveyOptions}>
-                {MiniSurveyOption({ title: "American", img: "./images/go.svg", selectedIndex, updateSelected, index: 0, updateCategoryB})}
+                {MiniSurveyOption({ title: "American", img: "./images/go.svg", selectedIndex, updateSelected, index: 0, updateCategoryB })}
                 {MiniSurveyOption({ title: "Chinese", img: "./images/casual.svg", selectedIndex, updateSelected, index: 1, updateCategoryB })}
                 {MiniSurveyOption({ title: "Indian", img: "./images/fine.svg", selectedIndex, updateSelected, index: 2, updateCategoryB })}
                 {MiniSurveyOption({ title: "Steak", img: "./images/fine.svg", selectedIndex, updateSelected, index: 3, updateCategoryB })}
@@ -383,6 +474,7 @@ function SurveyScreen(props) {
                 {MiniSurveyOption({ title: "Surprise Me", img: "./images/fine.svg", selectedIndex, updateSelected, index: 8, updateCategoryB })}
               </div>
             </div>
+
           </div>
         );
         break;
@@ -403,18 +495,72 @@ function SurveyScreen(props) {
     return (
       <div style={styles.container}>
         <div style={styles.modalContent}>
-          <div style={styles.closeButton} onClick={() => {props.updateSurvey(false);updateSurveyState(0);updateSelected(null)}}>
-            close X
+          <div style={styles.closeButton} onClick={() => { props.updateSurvey(false); updateSurveyState(0); updateSelected(null) }}>
+            X
           </div>
+          <p style={styles.number}>{surveyState+1}</p>
           {content}
           <div>
-            <button onClick={() => {nextQuestion()}} style={styles.button}>next</button>
+            <button onClick={() => { nextQuestion() }} style={styles.button}>next</button>
           </div>
+          {CompletedDots({ completed: surveyState })}
         </div>
       </div>
     )
   } else {
     return null;
+  }
+}
+
+function CompletedDots(props) {
+  const container = {
+    display: "flex",
+    flexJustify: "center",
+    margin: "0px auto",
+    width: "50px",
+    marginTop: "30px",
+    marginBottom: "0px"
+  }
+  const dot = {
+    width: "10px",
+    height: "10px",
+    border: "2px solid #9C69E2",
+    backgroundColor: "#9C69E2",
+    borderRadius: "50%",
+    margin: "3px"
+  }
+  const emptyDot = {
+    width: "10px",
+    height: "10px",
+    border: "2px solid #9C69E2",
+    backgroundColor: "white",
+    borderRadius: "50%",
+    margin: "3px"
+  }
+  if (props.completed == 0) {
+    return (
+      <div style={container}>
+        <div style={dot}></div>
+        <div style={emptyDot}></div>
+        <div style={emptyDot}></div>
+      </div>
+    )
+  } else if (props.completed == 1) {
+    return (
+      <div style={container}>
+        <div style={dot}></div>
+        <div style={dot}></div>
+        <div style={emptyDot}></div>
+      </div>
+    )
+  } else {
+    return (
+      <div style={container}>
+        <div style={dot}></div>
+        <div style={dot}></div>
+        <div style={dot}></div>
+      </div>
+    )
   }
 }
 
@@ -453,7 +599,7 @@ function SurveyOption(props) {
   }
   const containerStyle = props.selectedIndex == props.index ? styles.clickedContainer : styles.container;
   return (
-    <div style={containerStyle} onClick={() => {props.updateSelected(props.index);props.updateCategory(props.index)}}>
+    <div style={containerStyle} onClick={() => { props.updateSelected(props.index); props.updateCategory(props.index) }}>
       <img src={props.img} style={styles.img} />
       <h5 style={styles.title}>{props.title}</h5>
     </div>
@@ -496,7 +642,7 @@ function MiniSurveyOption(props) {
   }
   const containerStyle = props.selectedIndex == props.index ? styles.clickedContainer : styles.container;
   return (
-    <div style={containerStyle} onClick={() => {props.updateSelected(props.index);props.updateCategoryB(props.index)}}>
+    <div style={containerStyle} onClick={() => { props.updateSelected(props.index); props.updateCategoryB(props.index) }}>
       <p style={styles.title}>{props.title}</p>
     </div>
   )
