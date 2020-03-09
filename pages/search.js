@@ -10,7 +10,7 @@ function queryYelpData(lat, lon, callback) {
   let corsUrl = "https://cors-anywhere.herokuapp.com/";
   let localUrl = "http://localhost:8080/";
   fetch(
-    localUrl + "https://api.yelp.com/v3/businesses/search?latitude=" + lat +
+    corsUrl + "https://api.yelp.com/v3/businesses/search?latitude=" + lat +
     "&longitude=" + lon + "&term=restaurant&sort_by=distance", {
     method: 'GET',
     headers: {
@@ -44,8 +44,8 @@ function Home() {
   }
 
   //component states
-  const [lat, setLat] = useState(37.314807);
-  const [lng, setLon] = useState(-121.914609);
+  const [lat, setLat] = useState(null);
+  const [lng, setLon] = useState(null);
   const [yelpData, updateYelpData] = useState(null)
   const coords = usePosition();
   const [columnState, updateColumn] = useState(0);
