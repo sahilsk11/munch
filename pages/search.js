@@ -377,7 +377,7 @@ function RightColumn(props) {
       },
       img: {
         width: "80%",
-        maxWidth: "300px",
+        maxWidth: "250px",
         display: "block",
         margin: "0px auto",
         paddingTop: "30px",
@@ -486,11 +486,12 @@ function RightColumn(props) {
         categoriesStr += " • " + category;
       }
     })
+    const img = restaurant.image_url == "" ? "https://image.flaticon.com/icons/svg/1046/1046857.svg" : restaurant.image_url;
     return (
       <div style={styles.container}>
         <div style={styles1.container}>
-          <p style={styles1.close} onClick={() => { props.updateColumn("map") }}>close X</p>
-          <img src={restaurant.image_url} style={styles1.img} />
+          <p style={styles1.close} onClick={() => { props.updateColumn("map") }}><u>back to map</u></p>
+          <img src={img} style={styles1.img} />
           <h1 style={styles1.title}>{restaurant.name}</h1>
           <p style={styles1.categoriesLabel}>{categoriesStr}</p>
           <div style={styles1.reviews}>
@@ -506,9 +507,9 @@ function RightColumn(props) {
 
           <h3 style={styles1.subtitle}>Curated Stories from the Owner</h3>
           <div style={styles1.storiesContainer}>
-            <img src={restaurant.image_url} style={styles1.story}/>
-            <img src={restaurant.image_url} style={styles1.story} />
-            <img src={restaurant.image_url} style={styles1.story} />
+            <img onClick={() => alert("This pulls up Instagram-like stories from the restaurant!")} src={img} style={styles1.story}/>
+            <img onClick={() => alert("This pulls up Instagram-like stories from the restaurant!")} src={img} style={styles1.story} />
+            <img onClick={() => alert("This pulls up Instagram-like stories from the restaurant!")} src={img} style={styles1.story} />
           </div>
 
           <h3 style={styles1.subtitle}>History, Culture, and Scene</h3>
