@@ -370,7 +370,7 @@ function RightColumn(props) {
     var index = 0;
     props.data.forEach(function (restaurant) {
       markers.push(
-        <Marker title={restaurant.name} lat={restaurant.coordinates.latitude} index={index} test={"hi"} updateColumn={props.updateColumn} lng={restaurant.coordinates.longitude} />
+        <Marker title={restaurant.name} lat={restaurant.coordinates.latitude} index={index} updateColumn={props.updateColumn} lng={restaurant.coordinates.longitude} />
       );
       console.log(index)
       index++;
