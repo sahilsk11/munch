@@ -413,6 +413,7 @@ function SurveyScreen(props) {
       cursor: "pointer",
       outline: "none",
       boxShadow: "0px 4px 20px rgba(75, 93, 104, 0.25)",
+      border: "1px solid rgba(0, 0, 0, 0)"
     },
     number: {
       textAlign: "center",
